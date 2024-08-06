@@ -3,12 +3,12 @@ package todo
 import "time"
 
 type Todo struct {
-	text      string
-	status    bool
-	endDate   *time.Time
-	createdAt *time.Time
+	Text      string
+	Status    bool
+	EndDate   *time.Time
+	CreatedAt *time.Time
 }
 
 type ListTodo struct {
-	todoList []Todo
+	TodoList []Todo
 }
