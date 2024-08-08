@@ -1,5 +1,0 @@
-{
-    "db": "mongo",
-    "defaultStorage": "device",
-    "path": "todo.json"
-}

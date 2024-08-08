@@ -1,16 +1,16 @@
 package main
 
 import (
-	"fmt"
-
-	"github.com/Abhishek047/todo-app/configs"
+	"github.com/Abhishek047/todo-app/todo"
 )
 
 func main() {
-	fmt.Println("main")
-	data, err := configs.GetConfigData()
-	if err != nil {
-		fmt.Println("we have an error")
-	}
-	fmt.Println(data)
+	// data, err := configs.GetConfigData()
+	// if err != nil {
+	// 	fmt.Println("we have an error")
+	// }
+	todo := todo.GetTodoList()
+	todo.AddTodo("First Text", nil)
+	todo.AddTodo("Second Text", nil)
+	todo.ShowAll()
 }
