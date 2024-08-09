@@ -51,6 +51,7 @@ func (todo *TodoList) ShowAll() {
 	w.Flush()
 }
 
+// can make it a singleton so only to work on 1 todo list
 func GetTodoList() TodoList {
 	todoList := TodoList{
 		List: []Todo{},

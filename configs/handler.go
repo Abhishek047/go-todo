@@ -20,11 +20,16 @@ func GetConfig() *AppConfig {
 		lock.Lock()
 		defer lock.Unlock()
 		if config == nil {
-			// fetch configs
-			config = &AppConfig{
-				Db:             Device,
-				DefaultStorage: Device,
-				Path:           StoragePath,
+			data, err := GetConfigData()
+			if err != nil {
+				fmt.Println("err in fetching config....")
+				config = &AppConfig{
+					Db:             Device,
+					DefaultStorage: Device,
+					Path:           StoragePath,
+				}
+			} else {
+				config = data
 			}
 		}
 	} else {

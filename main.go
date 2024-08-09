@@ -1,11 +1,15 @@
 package main
 
 import (
+	"fmt"
+
+	"github.com/Abhishek047/todo-app/database"
 	"github.com/Abhishek047/todo-app/todo"
 )
 
 func main() {
-	// data, err := configs.GetConfigData()
+	DB := database.GetDb()
+	fmt.Println(DB.Fetch())
 	// if err != nil {
 	// 	fmt.Println("we have an error")
 	// }
