@@ -4,44 +4,39 @@ import (
 	"fmt"
 	"sync"
 
+	apptype "github.com/Abhishek047/todo-app/app-type"
 	"github.com/Abhishek047/todo-app/configs"
-	"github.com/Abhishek047/todo-app/todo"
 )
 
-type DbI interface {
-	Save(todo.Todo)
-	Fetch() todo.TodoList
-}
 type DbClass struct {
-	DB DbI
+	DB apptype.DbI
 }
 
 var single = &DbClass{}
 var lock = &sync.Mutex{}
 
-func setDb(DbStrategy DbI) {
+func setDb(DbStrategy apptype.DbI) {
 	single.DB = DbStrategy
 }
 
-func GetDb() DbI {
+func GetDb() apptype.DbI {
 	if single.DB == nil {
 		lock.Lock()
 		defer lock.Unlock()
 		if single.DB == nil {
 			data := configs.GetConfig()
-			fmt.Println(data, "current")
 			switch data.Db {
-			case configs.Mongo:
+			case apptype.Mongo:
 				{
 					fmt.Println("set To mongo")
 					break
 				}
-			case configs.Device:
+			case apptype.Device:
 				{
 					setDb(DeviceStrategy)
 					break
 				}
-			case configs.Psql:
+			case apptype.Psql:
 				{
 					fmt.Println("set To psql")
 					break

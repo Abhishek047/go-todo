@@ -3,18 +3,17 @@ package main
 import (
 	"fmt"
 
+	apptype "github.com/Abhishek047/todo-app/app-type"
 	"github.com/Abhishek047/todo-app/database"
-	"github.com/Abhishek047/todo-app/todo"
 )
 
 func main() {
 	DB := database.GetDb()
-	fmt.Println(DB.Fetch())
-	// if err != nil {
-	// 	fmt.Println("we have an error")
-	// }
-	todo := todo.GetTodoList()
-	todo.AddTodo("First Text", nil)
-	todo.AddTodo("Second Text", nil)
+	todo, err := apptype.GetTodoList(DB)
+	if err != nil {
+		fmt.Println("fetch errror")
+	}
+	todo.AddTodo("New Text", nil, DB)
+	// todo.AddTodo("Second LDO Text", nil, DB)
 	todo.ShowAll()
 }

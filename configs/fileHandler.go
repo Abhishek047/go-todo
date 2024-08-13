@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"io"
 	"os"
+
+	apptype "github.com/Abhishek047/todo-app/app-type"
 )
 
 type FileData interface{}
@@ -17,19 +19,19 @@ func OpenFile(path string) ([]byte, error) {
 		return nil, err
 	}
 	defer file.Close()
-	fmt.Println("decoding...")
+	fmt.Println("open file...")
 	return io.ReadAll(file)
 }
 
 // @create default config file
-func CreateDefaultConfig() (*AppConfig, error) {
+func CreateDefaultConfig() (*apptype.AppConfig, error) {
 	fmt.Println("creating directory...")
-	err := os.MkdirAll(ConfigDirectory, 0700)
+	err := os.MkdirAll(apptype.ConfigDirectory, 0700)
 	if err != nil {
 		return nil, err
 	}
 	fmt.Println("creating file...")
-	newFile, err := os.Create(ConfigPath)
+	newFile, err := os.Create(apptype.ConfigPath)
 	if err != nil {
 		return nil, err
 	}
@@ -44,9 +46,9 @@ func CreateDefaultConfig() (*AppConfig, error) {
 }
 
 // open config file
-func GetConfigData() (*AppConfig, error) {
+func GetConfigData() (*apptype.AppConfig, error) {
 	fmt.Println("fetching config")
-	data, err := OpenFile(ConfigPath)
+	data, err := OpenFile(apptype.ConfigPath)
 	if err != nil {
 		if os.IsNotExist(err) {
 			config, err := CreateDefaultConfig()
@@ -58,7 +60,7 @@ func GetConfigData() (*AppConfig, error) {
 		return nil, err
 	}
 	// can make this un-marshalling as a strategy
-	var typedData AppConfig
+	var typedData apptype.AppConfig
 	err = json.Unmarshal(data, &typedData)
 	if err != nil {
 		return nil, err

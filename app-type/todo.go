@@ -1,4 +1,4 @@
-package todo
+package apptype
 
 import (
 	"fmt"
@@ -19,10 +19,11 @@ func CreateTodoItem(text string, endDate *time.Time) Todo {
 	}
 }
 
-func (todo *TodoList) AddTodo(text string, endDate *time.Time) {
+func (todo *TodoList) AddTodo(text string, endDate *time.Time, dbInstance DbI) {
 	todoItem := CreateTodoItem(text, endDate)
 	todo.List = append(todo.List, todoItem)
 	// do the save strategy here
+	dbInstance.Save(todoItem)
 }
 
 func (todo *TodoList) DeleteTodo(id int64) {
@@ -52,10 +53,17 @@ func (todo *TodoList) ShowAll() {
 }
 
 // can make it a singleton so only to work on 1 todo list
-func GetTodoList() TodoList {
+func GetTodoList(dbInstance DbI) (TodoList, error) {
 	todoList := TodoList{
 		List: []Todo{},
 	}
+	if dbInstance != nil {
+		newList, err := dbInstance.Fetch()
+		if err != nil {
+			return todoList, err
+		}
+		todoList.List = newList
+	}
 	// fetch here
-	return todoList
+	return todoList, nil
 }
