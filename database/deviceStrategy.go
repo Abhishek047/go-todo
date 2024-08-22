@@ -108,3 +108,34 @@ func (s *deviceStart) UpdateTodoDone(id string) *apptype.Todo {
 	os.WriteFile(settings.Path, result, os.ModePerm)
 	return &foundItem
 }
+
+func (s *deviceStart) Delete(id string) *apptype.Todo {
+	_, err := s.Fetch()
+	if err != nil {
+		log.Fatal(err)
+	}
+	idForSearch, err := strconv.Atoi(id)
+	if err != nil {
+		log.Fatal(err)
+	}
+	var indexToDelete int = -1
+	for index, item := range list {
+		if item.Id == int64(idForSearch) {
+			indexToDelete = index
+			break
+		}
+	}
+	if indexToDelete == -1 {
+		fmt.Println("Not found")
+		return nil
+	}
+	deletedItem := list[indexToDelete]
+	list = append(list[:indexToDelete], list[indexToDelete+1])
+	result, err := json.Marshal(list)
+	if err != nil {
+		log.Fatal("error in marshaling")
+		return nil
+	}
+	os.WriteFile(settings.Path, result, os.ModePerm)
+	return &deletedItem
+}

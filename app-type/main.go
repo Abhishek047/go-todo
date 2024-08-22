@@ -25,6 +25,7 @@ type DbI interface {
 	Fetch() ([]Todo, error)
 	GetName() DBType
 	UpdateTodoDone(id string) *Todo
+	Delete(id string) *Todo
 }
 
 // configs

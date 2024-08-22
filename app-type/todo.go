@@ -35,19 +35,19 @@ func (todo *TodoList) AddTodo(text string, dbInstance DbI) Todo {
 	return todoItem
 }
 
-func (todo *TodoList) DeleteTodo(id int64) {
-	var indexToDelete int = -1
-	for index, item := range todo.List {
-		if item.Id == id {
-			indexToDelete = index
-			break
+func (todo *TodoList) DeleteTodo(id string, dbInstance DbI) error {
+	if dbInstance != nil {
+		deletedItem := dbInstance.Delete(id)
+		if deletedItem != nil {
+			fmt.Println("Deleted item")
+			PrintTodoItems([]Todo{
+				*deletedItem,
+			})
 		}
-	}
-	if indexToDelete == -1 {
-		fmt.Println("Id not found")
 	} else {
-		todo.List = append(todo.List[:indexToDelete], todo.List[indexToDelete+1])
+		fmt.Println("No DB to work with")
 	}
+	return nil
 	// do the save strategy here
 }
 

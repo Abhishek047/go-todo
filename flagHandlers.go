@@ -29,3 +29,9 @@ func MarkTodoDone(todoId string) {
 	todo := apptype.GetTodoList()
 	todo.MarkDone(todoId, DB)
 }
+
+func DeleteTodoHandler(todoId string) {
+	DB := database.GetDb()
+	todo := apptype.GetTodoList()
+	todo.DeleteTodo(todoId, DB)
+}

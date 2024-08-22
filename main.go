@@ -21,6 +21,7 @@ func main() {
 	addFlag := flag.Bool("add", false, "add todo flag")
 	listFlag := flag.Bool("list", false, "list todo flag")
 	doneFlag := flag.Bool("done", false, "mark as done todo flag")
+	deleteFlag := flag.Bool("del", false, "mark as done todo flag")
 	flag.Parse()
 	switch {
 	case *addFlag:
@@ -35,6 +36,10 @@ func main() {
 		args := flag.Args()
 		id := noArgsCheck(args)
 		MarkTodoDone(id)
+	case *deleteFlag:
+		args := flag.Args()
+		id := noArgsCheck(args)
+		DeleteTodoHandler(id)
 	default:
 		{
 			fmt.Println("no block")
