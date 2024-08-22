@@ -43,8 +43,6 @@ func GetDb() apptype.DbI {
 				}
 			}
 		}
-	} else {
-		fmt.Println("Already fetched")
 	}
 	return single.DB
 }

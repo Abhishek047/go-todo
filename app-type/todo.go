@@ -19,11 +19,20 @@ func CreateTodoItem(text string, endDate *time.Time) Todo {
 	}
 }
 
-func (todo *TodoList) AddTodo(text string, endDate *time.Time, dbInstance DbI) {
-	todoItem := CreateTodoItem(text, endDate)
-	todo.List = append(todo.List, todoItem)
-	// do the save strategy here
-	dbInstance.Save(todoItem)
+func PrintTodoItems(todoItem []Todo) {
+	w := tabwriter.NewWriter(os.Stdout, 0, 0, 3, ' ', 0)
+	fmt.Fprintln(w, "ID\tTodo\tStatus\tCreatedAt")
+	for _, item := range todoItem {
+		printStr := fmt.Sprintf("%v\t%v\t%v\t%v", item.Id, item.Text, item.Status, item.CreatedAt.Format("Jan 02, 2006"))
+		fmt.Fprintln(w, printStr)
+	}
+	w.Flush()
+}
+
+func (todo *TodoList) AddTodo(text string, dbInstance DbI) Todo {
+	todoItem := CreateTodoItem(text, nil)
+	dbInstance.AddItem(todoItem)
+	return todoItem
 }
 
 func (todo *TodoList) DeleteTodo(id int64) {
@@ -43,27 +52,38 @@ func (todo *TodoList) DeleteTodo(id int64) {
 }
 
 func (todo *TodoList) ShowAll() {
-	w := tabwriter.NewWriter(os.Stdout, 0, 0, 3, ' ', 0)
-	fmt.Fprintln(w, "ID\tTodo\tStatus\tCreatedAt")
-	for _, item := range todo.List {
-		printStr := fmt.Sprintf("%v\t%v\t%v\t%v", item.Id, item.Text, item.Status, item.CreatedAt.Format("Jan 02, 2006"))
-		fmt.Fprintln(w, printStr)
-	}
-	w.Flush()
+	PrintTodoItems(todo.List)
 }
 
-// can make it a singleton so only to work on 1 todo list
-func GetTodoList(dbInstance DbI) (TodoList, error) {
-	todoList := TodoList{
-		List: []Todo{},
-	}
+func (todo *TodoList) FetchList(dbInstance DbI) error {
 	if dbInstance != nil {
 		newList, err := dbInstance.Fetch()
 		if err != nil {
-			return todoList, err
+			return err
 		}
-		todoList.List = newList
+		todo.List = newList
 	}
-	// fetch here
-	return todoList, nil
+	return nil
+}
+
+func (todo *TodoList) MarkDone(id string, dbInstance DbI) error {
+	if dbInstance != nil {
+		updatedItem := dbInstance.UpdateTodoDone(id)
+		if updatedItem != nil {
+			PrintTodoItems([]Todo{
+				*updatedItem,
+			})
+		}
+	} else {
+		fmt.Println("No DB to work with")
+	}
+	return nil
+}
+
+// can make it a singleton so only to work on 1 todo list
+func GetTodoList() *TodoList {
+	todoList := TodoList{
+		List: []Todo{},
+	}
+	return &todoList
 }

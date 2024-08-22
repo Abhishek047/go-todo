@@ -28,8 +28,6 @@ func GetConfig() *apptype.AppConfig {
 				config = data
 			}
 		}
-	} else {
-		fmt.Println("Already fetched")
 	}
 	return config
 }

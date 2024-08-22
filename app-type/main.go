@@ -17,15 +17,17 @@ type TodoList struct {
 	List []Todo
 }
 
+type DBType string
+
 // Data base-types
 type DbI interface {
-	Save(Todo) error
+	AddItem(Todo) error
 	Fetch() ([]Todo, error)
+	GetName() DBType
+	UpdateTodoDone(id string) *Todo
 }
 
 // configs
-
-type DBType string
 
 const (
 	Mongo           DBType = "mongo"

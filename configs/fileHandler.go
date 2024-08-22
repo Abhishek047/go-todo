@@ -19,24 +19,24 @@ func OpenFile(path string) ([]byte, error) {
 		return nil, err
 	}
 	defer file.Close()
-	fmt.Println("open file...")
+	// fmt.Println("open file...")
 	return io.ReadAll(file)
 }
 
 // @create default config file
 func CreateDefaultConfig() (*apptype.AppConfig, error) {
-	fmt.Println("creating directory...")
+	// fmt.Println("creating directory...")
 	err := os.MkdirAll(apptype.ConfigDirectory, 0700)
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("creating file...")
+	// fmt.Println("creating file...")
 	newFile, err := os.Create(apptype.ConfigPath)
 	if err != nil {
 		return nil, err
 	}
 	defer newFile.Close()
-	fmt.Println("Encoding...")
+	// fmt.Println("Encoding...")
 	encoder := json.NewEncoder(newFile)
 	err = encoder.Encode(DefaultConfig)
 	if err != nil {
@@ -47,7 +47,7 @@ func CreateDefaultConfig() (*apptype.AppConfig, error) {
 
 // open config file
 func GetConfigData() (*apptype.AppConfig, error) {
-	fmt.Println("fetching config")
+	// fmt.Println("fetching config")
 	data, err := OpenFile(apptype.ConfigPath)
 	if err != nil {
 		if os.IsNotExist(err) {
